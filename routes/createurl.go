@@ -3,6 +3,7 @@ package routes
 import (
 	"fmt"
 	"math/rand"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +16,7 @@ func CreateURL(c *gin.Context) {
 		store: database,
 	}
 
-	fmt.Printf("Data store: %v", ds)
+	fmt.Printf("Data store: %v\n", ds)
 
 	url := c.Param("url")
 	shortURL, err := ds.createurl(url)
@@ -44,9 +45,13 @@ func (ds dataStore) createurl(url string) (string, error) {
 	}
 
 	hash := rand.Intn(100)
-	ds.store[string(hash)] = url
+	ds.store[strconv.FormatInt(int64(hash), 10)] = url
 
 	return fmt.Sprintf("localhost:8080/%d", hash), nil
+}
+
+func (ds dataStore) lookupURL(hash string) (string, error) {
+	return ds.store[hash], nil
 }
 
 func validateURL(url string) bool {
