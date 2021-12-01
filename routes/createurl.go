@@ -3,6 +3,7 @@ package routes
 import (
 	"fmt"
 	"math/rand"
+	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -26,7 +27,7 @@ func CreateURL(c *gin.Context) {
 
 	fmt.Printf("Orignial url: %q short url: %q\n", url, shortURL)
 
-	c.JSON(200, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"shortURL": shortURL,
 	})
 }
