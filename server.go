@@ -7,6 +7,7 @@ import (
 
 func main() {
 	r := gin.Default()
+	r.GET("/", routes.Home)
 	r.GET("/create-url/:url", routes.CreateURL)
 	r.GET("/:hash", routes.Redirect)
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
