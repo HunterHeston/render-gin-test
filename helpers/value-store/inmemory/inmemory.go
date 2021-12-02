@@ -1,7 +1,7 @@
-package valuestore
+package inmemory
 
 import (
-	"math/rand"
+	"fmt"
 	"strconv"
 )
 
@@ -18,9 +18,16 @@ func NewInMemory(maxEntries int64) InMemory {
 }
 
 func (im InMemory) Lookup(id string) ([]byte, error) {
-	return nil, nil
+
+	v, ok := im.store[id]
+	if !ok {
+		return nil, fmt.Errorf("value for key %q  does not exist", id)
+	}
+
+	return v, nil
 }
 
+// Generate an ID and save the value to an in memory store.
 func (in InMemory) Save(value []byte) (string, error) {
 	// make a copy of the value paseed in by pointer
 	data := make([]byte, len(value))
@@ -28,17 +35,13 @@ func (in InMemory) Save(value []byte) (string, error) {
 
 	var strKey string
 	for i := 0; i < int(in.maxEntries); i++ {
-		key := rand.Intn(int(in.maxEntries))
-		strKey = strconv.FormatInt(int64(key), 10)
+		strKey = strconv.FormatInt(int64(i), 10)
 		_, inUse := in.store[strKey]
 		if !inUse {
 			in.store[strKey] = value
-
 			break
 		}
 	}
 
 	return strKey, nil
 }
-
-func keyUsed()
