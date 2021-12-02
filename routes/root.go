@@ -7,6 +7,6 @@ import (
 func Home(c *gin.Context) {
 
 	c.JSON(200, gin.H{
-		"message": "Hello, World!",
+		"message": "Nothing to see here.",
 	})
 }
