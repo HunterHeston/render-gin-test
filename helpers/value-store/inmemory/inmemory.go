@@ -2,7 +2,8 @@ package inmemory
 
 import (
 	"fmt"
-	"strconv"
+
+	stringgeneration "github.com/hunterheston/gin-server/helpers/string-generation"
 )
 
 type InMemory struct {
@@ -27,19 +28,19 @@ func (im InMemory) Lookup(id string) ([]byte, error) {
 
 // Generate an ID and save the value to an in memory store.
 func (in InMemory) Save(value []byte) (string, error) {
-	// make a copy of the value paseed in by pointer
+	// make a copy of the value paseed in by pointer.
 	data := make([]byte, len(value))
 	copy(data, value)
 
-	var strKey string
-	for i := 0; i < int(in.maxEntries); i++ {
-		strKey = strconv.FormatInt(int64(i), 10)
-		_, inUse := in.store[strKey]
-		if !inUse {
-			in.store[strKey] = value
-			break
-		}
+	// Generate random strings of 6 chars until one does not exist.
+	randomID := stringgeneration.RandStringBytesRmndr(6)
+	for _, exists := in.store[randomID]; exists; {
+		randomID = stringgeneration.RandStringBytesRmndr(6)
 	}
 
-	return strKey, nil
+	// save the string that ended up not existing.
+	in.store[randomID] = value
+
+	// return the id(string).
+	return randomID, nil
 }
