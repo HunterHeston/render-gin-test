@@ -2,6 +2,8 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	valuestore "github.com/hunterheston/gin-server/helpers/value-store"
+	"github.com/hunterheston/gin-server/helpers/value-store/inmemory"
 	"github.com/hunterheston/gin-server/routes"
 )
 
@@ -13,7 +15,15 @@ func init() {
 	// So that both CreateURL and Redirect URL can access the same in memory data store.
 }
 
+var database valuestore.ValueStore
+
+func init() {
+	database = inmemory.NewInMemory()
+
+}
+
 func main() {
+
 	r := gin.Default()
 	r.GET("/create-url/:url", routes.CreateURL)
 	r.GET("/:hash", routes.Redirect)
