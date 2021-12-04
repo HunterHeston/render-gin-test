@@ -3,7 +3,7 @@ package inmemory
 import (
 	"fmt"
 
-	stringgeneration "github.com/hunterheston/gin-server/helpers/string-generation"
+	stringgeneration "github.com/hunterheston/gin-server/helpers/stringgeneration"
 )
 
 type InMemory struct {
@@ -16,7 +16,7 @@ func NewInMemory() InMemory {
 	}
 }
 
-func (im InMemory) Lookup(id string) ([]byte, error) {
+func (im *InMemory) Lookup(id string) ([]byte, error) {
 	v, ok := im.store[id]
 	if !ok {
 		return nil, fmt.Errorf("value for key %q  does not exist", id)
@@ -25,7 +25,7 @@ func (im InMemory) Lookup(id string) ([]byte, error) {
 }
 
 // Generate an ID and save the value to an in memory store.
-func (in InMemory) Save(value []byte) (string, error) {
+func (in *InMemory) Save(value []byte) (string, error) {
 	// make a copy of the value paseed in by pointer.
 	data := make([]byte, len(value))
 	copy(data, value)
