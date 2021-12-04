@@ -6,7 +6,7 @@ import (
 
 func TestSave(t *testing.T) {
 
-	valueStore := NewInMemory(3)
+	valueStore := NewInMemory()
 
 	for _, tc := range []struct {
 		name    string

@@ -7,14 +7,12 @@ import (
 )
 
 type InMemory struct {
-	store      map[string][]byte
-	maxEntries int64
+	store map[string][]byte
 }
 
-func NewInMemory(maxEntries int64) InMemory {
+func NewInMemory() InMemory {
 	return InMemory{
-		store:      make(map[string][]byte),
-		maxEntries: maxEntries,
+		store: make(map[string][]byte),
 	}
 }
 
