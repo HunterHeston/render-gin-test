@@ -18,12 +18,10 @@ func NewInMemory(maxEntries int64) InMemory {
 }
 
 func (im InMemory) Lookup(id string) ([]byte, error) {
-
 	v, ok := im.store[id]
 	if !ok {
 		return nil, fmt.Errorf("value for key %q  does not exist", id)
 	}
-
 	return v, nil
 }
 
