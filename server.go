@@ -2,9 +2,10 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	valuestore "github.com/hunterheston/gin-server/helpers/value-store"
-	"github.com/hunterheston/gin-server/helpers/value-store/inmemory"
-	"github.com/hunterheston/gin-server/routes"
+	valuestore "github.com/hunterheston/gin-server/helpers/valuestore"
+	"github.com/hunterheston/gin-server/helpers/valuestore/inmemory"
+	createurl "github.com/hunterheston/gin-server/routes/createurl"
+	"github.com/hunterheston/gin-server/routes/redirect"
 )
 
 func init() {
@@ -25,7 +26,7 @@ func init() {
 func main() {
 
 	r := gin.Default()
-	r.GET("/create-url/:url", routes.CreateURL)
-	r.GET("/:hash", routes.Redirect)
+	r.GET("/create-url/:url", createurl.CreateURL)
+	r.GET("/:hash", redirect.NewRedirect(database))
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
