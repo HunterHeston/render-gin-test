@@ -2,10 +2,10 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	valuestore "github.com/hunterheston/gin-server/helpers/valuestore"
-	"github.com/hunterheston/gin-server/helpers/valuestore/inmemory"
 	createurl "github.com/hunterheston/gin-server/routes/createurl"
 	"github.com/hunterheston/gin-server/routes/redirect"
+	valuestore "github.com/hunterheston/gin-server/src/valuestore"
+	"github.com/hunterheston/gin-server/src/valuestore/inmemory"
 )
 
 func init() {

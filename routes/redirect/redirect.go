@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
-	valuestore "github.com/hunterheston/gin-server/helpers/valuestore"
+	valuestore "github.com/hunterheston/gin-server/src/valuestore"
 )
 
 var vs valuestore.ValueStore

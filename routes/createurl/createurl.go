@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/hunterheston/gin-server/helpers/valuestore"
+	"github.com/hunterheston/gin-server/src/valuestore"
 )
 
 var vs valuestore.ValueStore

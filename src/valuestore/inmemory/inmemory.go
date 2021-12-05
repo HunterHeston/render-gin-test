@@ -3,7 +3,7 @@ package inmemory
 import (
 	"fmt"
 
-	stringgeneration "github.com/hunterheston/gin-server/helpers/stringgeneration"
+	stringgeneration "github.com/hunterheston/gin-server/src/stringgeneration"
 )
 
 type InMemory struct {
