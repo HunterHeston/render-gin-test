@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	createurl "github.com/hunterheston/gin-server/routes/createurl"
-	"github.com/hunterheston/gin-server/routes/redirect"
+	"github.com/hunterheston/gin-server/src/routes/createurl"
+	"github.com/hunterheston/gin-server/src/routes/redirect"
 	valuestore "github.com/hunterheston/gin-server/src/valuestore"
 	"github.com/hunterheston/gin-server/src/valuestore/inmemory"
 )
