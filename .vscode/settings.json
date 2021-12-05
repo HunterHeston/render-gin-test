@@ -22,6 +22,13 @@
               "singleInstance": true,
               "command": "go build -tags netgo -ldflags '-s -w' -o build/app && ./build/app", // This is executed in the terminal.
             },
+            {
+              "cwd": "${workspaceFolder}", // Terminal initial folder ${workspaceFolder} and os user home as defaults
+              "name": "Run All Tests",
+              "color": "white",
+              "singleInstance": true,
+              "command": "go test ./...", // This is executed in the terminal.
+            },
         ]
     },
     "files.exclude": {
