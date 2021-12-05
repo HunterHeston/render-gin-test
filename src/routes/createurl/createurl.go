@@ -16,7 +16,6 @@ func New(valueStore valuestore.ValueStore) func(c *gin.Context) {
 
 // main route handler
 func CreateURL(c *gin.Context) {
-
 	// route expects a single
 	rawUrlInput := c.Query("url")
 	if !validUrl(rawUrlInput) {
