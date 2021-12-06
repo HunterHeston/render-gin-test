@@ -17,7 +17,7 @@
             },
             {
               "cwd": "${workspaceFolder}", // Terminal initial folder ${workspaceFolder} and os user home as defaults
-              "name": "Build & Rune",
+              "name": "Build & Run",
               "color": "white",
               "singleInstance": true,
               "command": "go build -tags netgo -ldflags '-s -w' -o build/app && ./build/app", // This is executed in the terminal.
