@@ -2,6 +2,7 @@ package redirect
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	valuestore "github.com/hunterheston/gin-server/src/valuestore"
@@ -16,12 +17,13 @@ func New(valueStore valuestore.ValueStore) func(c *gin.Context) {
 }
 
 func Redirect(c *gin.Context) {
-	key := c.Param("hash")
-	url, err := vs.LookUp(key)
+	valueID := c.Param("id")
+	url, err := vs.LookUp(valueID)
 	if err != nil {
-		fmt.Printf("Error looking up value for key=%v: %v", key, err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": fmt.Sprintf("error getting url for %q", valueID),
+		})
 	}
-	c.JSON(200, gin.H{
-		"url": url,
-	})
+
+	c.Redirect(http.StatusMovedPermanently, string(url))
 }

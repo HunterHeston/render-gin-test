@@ -20,6 +20,6 @@ func main() {
 	r := gin.Default()
 	r.GET("/", root.Root)
 	r.GET("/new", createurl.New(database))
-	r.GET("/:hash", redirect.New(database))
+	r.GET("/:id", redirect.New(database))
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
