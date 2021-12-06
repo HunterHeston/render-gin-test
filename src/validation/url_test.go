@@ -36,6 +36,10 @@ func TestValidateURL(t *testing.T) {
 			name:  "email",
 			input: "testemail@gmail.com",
 		},
+		{
+			name:  "url starting with /",
+			input: "/hunterheston.com",
+		},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			got := ValidateURL(tc.input)
