@@ -25,5 +25,7 @@ func Redirect(c *gin.Context) {
 		})
 	}
 
-	c.Redirect(http.StatusMovedPermanently, string(url))
+	c.JSON(http.StatusOK, gin.H{
+		"url": url,
+	})
 }
