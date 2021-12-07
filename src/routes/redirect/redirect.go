@@ -26,6 +26,6 @@ func Redirect(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"id": string(url),
+		"url": string(url),
 	})
 }
