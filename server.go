@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/hunterheston/gin-server/src/routes/createurl"
 	"github.com/hunterheston/gin-server/src/routes/redirect"
@@ -18,6 +19,12 @@ func init() {
 func main() {
 
 	r := gin.Default()
+	r.Use(cors.New(
+		cors.Config{
+			AllowOrigins: []string{"http://localhost:3000"},
+		},
+	))
+
 	r.GET("/", root.Root)
 	r.GET("/new", createurl.New(database))
 	r.GET("/:id", redirect.New(database))

@@ -26,6 +26,11 @@ func (im InMemory) LookUp(id string) ([]byte, error) {
 
 // Generate an ID and save the value to an in memory store.
 func (in InMemory) Save(value []byte) (string, error) {
+
+	for k, v := range in.store {
+		fmt.Printf("%v: %v\n", k, string(v))
+	}
+
 	// make a copy of the value paseed in by pointer.
 	data := make([]byte, len(value))
 	copy(data, value)
