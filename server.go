@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/hunterheston/gin-server/src/routes/createurl"
@@ -8,20 +11,32 @@ import (
 	"github.com/hunterheston/gin-server/src/routes/root"
 	valuestore "github.com/hunterheston/gin-server/src/valuestore"
 	"github.com/hunterheston/gin-server/src/valuestore/inmemory"
+	"github.com/joho/godotenv"
 )
 
-var database valuestore.ValueStore
+var (
+	database       valuestore.ValueStore
+	allowedOrigins = []string{"http://localhost:3000"}
+)
 
 func init() {
+	// setup the data store used throughout the server.
 	database = inmemory.NewInMemory()
+
+	// load and save env vars
+	godotenv.Load()
+	frontendHost := os.Getenv("FRONTEND_HOST")
+	allowedOrigins = append(allowedOrigins, frontendHost)
+	fmt.Println("HSH ", allowedOrigins)
 }
 
 func main() {
-
 	r := gin.Default()
+
+	// define hosts that can make requests to this server.
 	r.Use(cors.New(
 		cors.Config{
-			AllowOrigins: []string{"http://localhost:3000"},
+			AllowOrigins: allowedOrigins,
 		},
 	))
 
