@@ -1,4 +1,8 @@
 # exclude build output
 build
 
+# exclude env files
 .env
+
+# exclude credentials
+firebase-shrink-credentials.json
