@@ -33,6 +33,10 @@ func init() {
 func main() {
 	r := gin.Default()
 
+	// not using any proxies currently and defaulting to trusting all is insecure
+	// https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies
+	r.SetTrustedProxies(nil)
+
 	// define hosts that can make requests to this server.
 	r.Use(cors.New(
 		cors.Config{
