@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/gin-contrib/cors"
@@ -27,7 +26,6 @@ func init() {
 	godotenv.Load()
 	frontendHost := os.Getenv("FRONTEND_HOST")
 	allowedOrigins = append(allowedOrigins, frontendHost)
-	fmt.Println("HSH ", allowedOrigins)
 }
 
 func main() {
