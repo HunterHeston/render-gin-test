@@ -19,11 +19,14 @@ var (
 )
 
 func init() {
+
 	// setup the data store used throughout the server.
 	database = inmemory.NewInMemory()
 
-	// load and save env vars
+	// load env vars
 	godotenv.Load()
+
+	// save allowed hosts
 	frontendHost := os.Getenv("FRONTEND_HOST")
 	allowedOrigins = append(allowedOrigins, frontendHost)
 }
