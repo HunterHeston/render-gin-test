@@ -9,7 +9,7 @@ import (
 	"github.com/hunterheston/gin-server/src/routes/redirect"
 	"github.com/hunterheston/gin-server/src/routes/root"
 	valuestore "github.com/hunterheston/gin-server/src/valuestore"
-	"github.com/hunterheston/gin-server/src/valuestore/inmemory"
+	"github.com/hunterheston/gin-server/src/valuestore/firestore"
 	"github.com/joho/godotenv"
 )
 
@@ -21,7 +21,7 @@ var (
 func init() {
 
 	// setup the data store used throughout the server.
-	database = inmemory.NewInMemory()
+	database = firestore.New()
 
 	// load env vars
 	godotenv.Load()
