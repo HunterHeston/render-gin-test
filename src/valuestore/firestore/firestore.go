@@ -17,6 +17,11 @@ const KEY_PATH_ARG = "FIREBASE_SERVICE_KEY_PATH"
 
 var serviceKeyPath string
 
+type Firestore struct {
+	c *firestore.Client
+}
+
+///////////////////////////////////////////
 func init() {
 	// load env vars
 	godotenv.Load()
@@ -33,7 +38,8 @@ func init() {
 	serviceKeyPath = path.Join(wd, serviceKeyPath)
 }
 
-func GetClient() *firestore.Client {
+///////////////////////////////////////////
+func getClient() *firestore.Client {
 	// Use a service account
 	ctx := context.Background()
 	sa := option.WithCredentialsFile(serviceKeyPath)
@@ -50,8 +56,35 @@ func GetClient() *firestore.Client {
 	return client
 }
 
-func GetServiceAccount() {
-	//TODO: get the service account key from env vars
-	// create a service account instance
-	// return the account
+///////////////////////////////////////////
+func New() Firestore {
+	return Firestore{
+		c: getClient(),
+	}
+}
+
+///////////////////////////////////////////
+func (f Firestore) LookUp(id string) ([]byte, error) {
+	ctx := context.Background()
+	doc, err := f.c.Collection("urls").Doc(id).Get(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("error getting doc %q: %v", id, err)
+	}
+
+	url, ok := doc.Data()["url"]
+	if !ok {
+		return nil, fmt.Errorf("error document data does not contain url")
+	}
+
+	strURL, ok := url.(string)
+	if !ok {
+		return nil, fmt.Errorf("error url data is not of type string")
+	}
+
+	return []byte(strURL), nil
+}
+
+///////////////////////////////////////////
+func (f Firestore) Save(value []byte) (string, error) {
+	return "", nil
 }
