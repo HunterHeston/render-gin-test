@@ -13,13 +13,27 @@ import (
 	"github.com/hunterheston/gin-server/src/stringgeneration"
 	"github.com/joho/godotenv"
 	"google.golang.org/api/option"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
-const KEY_PATH_ARG = "FIREBASE_SERVICE_KEY_PATH"
+const (
+	KEY_PATH_ARG                       = "FIREBASE_SERVICE_KEY_PATH"
+	FIRESTORE_PATH_URL_COLLECTION_PATH = "FIRESTORE_PATH_URL_COLLECTION_PATH"
+)
 
-var serviceKeyPath string
+var (
+	serviceKeyPath string
+	firestorePath  string
+)
+
+func init() {
+	godotenv.Load()
+	fp := os.Getenv(FIRESTORE_PATH_URL_COLLECTION_PATH)
+	if fp == "" {
+		fmt.Printf("ERROR: could not get %q from environment.\n", FIRESTORE_PATH_URL_COLLECTION_PATH)
+	}
+	firestorePath = fp
+	fmt.Println("HSH ", fp)
+}
 
 type Firestore struct {
 	c *firestore.Client
@@ -49,12 +63,12 @@ func getClient() *firestore.Client {
 	sa := option.WithCredentialsFile(serviceKeyPath)
 	app, err := firebase.NewApp(ctx, nil, sa)
 	if err != nil {
-		log.Fatalln("HSH", err)
+		log.Fatalf("Error setting up new firebase app: %v\n", err)
 	}
 
 	client, err := app.Firestore(ctx)
 	if err != nil {
-		log.Fatalln("HSH", err)
+		log.Fatalf("Error getting client: %v\n", err)
 	}
 
 	return client
@@ -70,7 +84,7 @@ func New() Firestore {
 ///////////////////////////////////////////
 func (f Firestore) LookUp(id string) ([]byte, error) {
 	ctx := context.Background()
-	doc, err := f.c.Collection("urls").Doc(id).Get(ctx)
+	doc, err := f.c.Collection(firestorePath).Doc(id).Get(ctx)
 	if err != nil {
 		fmt.Println("error getting doc")
 		return nil, fmt.Errorf("error getting doc %q: %v", id, err)
@@ -101,24 +115,25 @@ func (f Firestore) Save(value []byte) (string, error) {
 		attempts++
 
 		id := stringgeneration.RandStringBytesRmndr(6)
-		doc, err := f.c.Collection("urls").Doc(id).Get(ctx)
+		docPath := path.Join(firestorePath, id)
+		_, err := f.c.Doc(docPath).Create(ctx, struct{}{})
 
 		// error getting doc. Try again.
-		if status.Code(err) != codes.NotFound {
-			fmt.Printf("Error fetching doc %q: %v\n", id, err)
-			continue
-		}
-		// id is already in use. Try again.
-		if doc.Exists() {
+		if err != nil {
+			fmt.Printf("Error doc already exists doc %q: %v\n", id, err)
 			continue
 		}
 
 		resultID = id
-		f.c.Collection("urls").Doc(id).Set(ctx, map[string]interface{}{
+		_, err = f.c.Doc(docPath).Set(ctx, map[string]interface{}{
 			"url":          string(value),
 			"date_created": time.Now(),
 		})
 		// exit
+		if err != nil {
+			fmt.Println("Error creating new doc: ", err)
+		}
+
 		break
 	}
 
