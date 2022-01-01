@@ -3,6 +3,7 @@ package createurl
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -40,9 +41,12 @@ func CreateURL(c *gin.Context) {
 		})
 	}
 
+	frontEnd := os.Getenv("FRONTEND_HOST")
+
 	// Send the ID of the stored value back to the client.
 	c.JSON(http.StatusOK, gin.H{
-		"id": valueID,
+		"id":  valueID,
+		"url": fmt.Sprintf("%s/%s", frontEnd, valueID),
 	})
 }
 
