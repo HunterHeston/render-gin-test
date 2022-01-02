@@ -34,7 +34,7 @@ func CreateURL(c *gin.Context) {
 	}
 
 	// Store the url and get it's id.
-	valueID, err := vs.Save([]byte(rawUrlInput))
+	valueID, err := vs.Save(c, []byte(rawUrlInput))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": fmt.Sprintf("Error saving your input: %v", err),

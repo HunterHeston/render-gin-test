@@ -25,6 +25,7 @@ var (
 	firestorePath  string
 )
 
+///////////////////////////////////////////
 func init() {
 	godotenv.Load()
 	fp := os.Getenv(FIRESTORE_PATH_URL_COLLECTION_PATH)
@@ -32,17 +33,6 @@ func init() {
 		fmt.Printf("ERROR: could not get %q from environment.\n", FIRESTORE_PATH_URL_COLLECTION_PATH)
 	}
 	firestorePath = fp
-	fmt.Println("HSH ", fp)
-}
-
-type Firestore struct {
-	c *firestore.Client
-}
-
-///////////////////////////////////////////
-func init() {
-	// load env vars
-	godotenv.Load()
 
 	serviceKeyPath = os.Getenv(KEY_PATH_ARG)
 	if serviceKeyPath == "" {
@@ -57,9 +47,13 @@ func init() {
 }
 
 ///////////////////////////////////////////
-func getClient() *firestore.Client {
+type Firestore struct {
+	c *firestore.Client
+}
+
+///////////////////////////////////////////
+func getClient(ctx context.Context) *firestore.Client {
 	// Use a service account
-	ctx := context.Background()
 	sa := option.WithCredentialsFile(serviceKeyPath)
 	app, err := firebase.NewApp(ctx, nil, sa)
 	if err != nil {
@@ -75,15 +69,15 @@ func getClient() *firestore.Client {
 }
 
 ///////////////////////////////////////////
-func New() Firestore {
+func New(ctx context.Context) Firestore {
 	return Firestore{
-		c: getClient(),
+		c: getClient(ctx),
 	}
 }
 
 ///////////////////////////////////////////
-func (f Firestore) LookUp(id string) ([]byte, error) {
-	ctx := context.Background()
+func (f Firestore) LookUp(ctx context.Context, id string) ([]byte, error) {
+
 	doc, err := f.c.Collection(firestorePath).Doc(id).Get(ctx)
 	if err != nil {
 		fmt.Println("error getting doc")
@@ -106,8 +100,8 @@ func (f Firestore) LookUp(id string) ([]byte, error) {
 }
 
 ///////////////////////////////////////////
-func (f Firestore) Save(value []byte) (string, error) {
-	ctx := context.Background()
+func (f Firestore) Save(ctx context.Context, value []byte) (string, error) {
+
 	done := false
 	attempts := 0
 	resultID := ""

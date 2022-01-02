@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"os"
 
 	"github.com/gin-contrib/cors"
@@ -19,9 +20,9 @@ var (
 )
 
 func init() {
-
+	ctx := context.Background()
 	// setup the data store used throughout the server.
-	database = firestore.New()
+	database = firestore.New(ctx)
 
 	// load env vars
 	godotenv.Load()

@@ -1,6 +1,7 @@
 package inmemory
 
 import (
+	"context"
 	"fmt"
 
 	stringgeneration "github.com/hunterheston/gin-server/src/stringgeneration"
@@ -16,7 +17,7 @@ func NewInMemory() InMemory {
 	}
 }
 
-func (im InMemory) LookUp(id string) ([]byte, error) {
+func (im InMemory) LookUp(ctx context.Context, id string) ([]byte, error) {
 	v, ok := im.store[id]
 	if !ok {
 		return nil, fmt.Errorf("value for key %q  does not exist", id)
@@ -25,7 +26,7 @@ func (im InMemory) LookUp(id string) ([]byte, error) {
 }
 
 // Generate an ID and save the value to an in memory store.
-func (in InMemory) Save(value []byte) (string, error) {
+func (in InMemory) Save(ctx context.Context, value []byte) (string, error) {
 
 	for k, v := range in.store {
 		fmt.Printf("%v: %v\n", k, string(v))

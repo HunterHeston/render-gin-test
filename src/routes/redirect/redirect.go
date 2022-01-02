@@ -18,7 +18,7 @@ func New(valueStore valuestore.ValueStore) func(c *gin.Context) {
 
 func Redirect(c *gin.Context) {
 	valueID := c.Param("id")
-	url, err := vs.LookUp(valueID)
+	url, err := vs.LookUp(c, valueID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": fmt.Sprintf("error getting url for %q", valueID),
