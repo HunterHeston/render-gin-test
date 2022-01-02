@@ -1,6 +1,7 @@
 package inmemory
 
 import (
+	"context"
 	"testing"
 )
 
@@ -35,7 +36,8 @@ func TestSave(t *testing.T) {
 		},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			got, err := valueStore.Save([]byte(tc.input))
+			ctx := context.Background()
+			got, err := valueStore.Save(ctx, []byte(tc.input))
 			if (err != nil) != tc.wantErr {
 				t.Errorf("Unexpected InMemory.Save(%q) got err: %v", tc.input, err)
 			}
