@@ -20,6 +20,9 @@ func New(valueStore valuestore.ValueStore) func(c *gin.Context) {
 
 // main route handler
 func CreateURL(c *gin.Context) {
+
+	fmt.Println("HSH create: ", c.ClientIP())
+
 	// route expects a single param "url"
 	rawUrlInput := c.Query("url")
 

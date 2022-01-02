@@ -17,6 +17,9 @@ func New(valueStore valuestore.ValueStore) func(c *gin.Context) {
 }
 
 func Redirect(c *gin.Context) {
+	// fmt.Println(c.Request)
+	fmt.Println("HSH redirect: ", c.ClientIP())
+
 	valueID := c.Param("id")
 	url, err := vs.LookUp(c, valueID)
 	if err != nil {
