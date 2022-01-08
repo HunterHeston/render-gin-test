@@ -24,8 +24,7 @@ func CreateURL(c *gin.Context) {
 	fmt.Println("HSH create: ", c.ClientIP())
 	fip := c.Request.Header["X-Forwarded-For"]
 	fmt.Println("HSH create X-Forwarded-For: ", fip)
-	rip := c.Request.Header["X-Real-IP"]
-	fmt.Println("HSH create X-Real-IP: ", rip)
+	fmt.Println("HSH create Header: ", c.Request.Header)
 
 	// route expects a single param "url"
 	rawUrlInput := c.Query("url")
