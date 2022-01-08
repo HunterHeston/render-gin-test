@@ -18,6 +18,9 @@ func New(valueStore valuestore.ValueStore) func(c *gin.Context) {
 
 func Redirect(c *gin.Context) {
 	fmt.Println("HSH redirect: ", c.ClientIP())
+	ip := c.Request.Header["X-Forwarded-For"]
+	fmt.Println("HSH redirect X-Forwarded-For: ", ip)
+
 	rip, ok := c.RemoteIP()
 	if !ok {
 		fmt.Println("Error getting remote ip")
