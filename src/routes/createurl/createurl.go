@@ -22,7 +22,7 @@ func New(valueStore valuestore.ValueStore) func(c *gin.Context) {
 func CreateURL(c *gin.Context) {
 
 	fmt.Println("HSH create: ", c.ClientIP())
-	fip := c.Request.Header["X-Forwarded-For"]
+	fip := c.Request.Header.Get("X-Forwarded-For")
 	fmt.Println("HSH create X-Forwarded-For: ", fip)
 	fmt.Println("HSH create Header: ", c.Request.Header)
 
