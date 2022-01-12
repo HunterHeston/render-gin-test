@@ -21,10 +21,6 @@ func New(valueStore valuestore.ValueStore) func(c *gin.Context) {
 // main route handler
 func CreateURL(c *gin.Context) {
 
-	fmt.Println("HSH create: ", c.ClientIP())
-	fip := c.Request.Header.Get("X-Forwarded-For")
-	fmt.Println("HSH create X-Forwarded-For: ", fip)
-	// fmt.Println("HSH create Header: ", c.Request.Header)
 	fmt.Println("HSH CF-Connecting-IP: ", c.Request.Header.Get("CF-Connecting-IP"))
 
 	// route expects a single param "url"

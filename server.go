@@ -9,7 +9,8 @@ import (
 	"github.com/hunterheston/gin-server/src/routes/createurl"
 	"github.com/hunterheston/gin-server/src/routes/redirect"
 	"github.com/hunterheston/gin-server/src/routes/root"
-	valuestore "github.com/hunterheston/gin-server/src/valuestore"
+	"github.com/hunterheston/gin-server/src/routes/test"
+	"github.com/hunterheston/gin-server/src/valuestore"
 	"github.com/hunterheston/gin-server/src/valuestore/firestore"
 	"github.com/joho/godotenv"
 )
@@ -48,6 +49,7 @@ func main() {
 
 	r.GET("/", root.Root)
 	r.GET("/new", createurl.New(database))
+	r.GET("/test", test.TestHandler)
 	r.GET("/:id", redirect.New(database))
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
