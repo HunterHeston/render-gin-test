@@ -10,6 +10,8 @@ import (
 
 	"cloud.google.com/go/firestore"
 	firebase "firebase.google.com/go"
+	"github.com/gin-gonic/gin"
+	"github.com/hunterheston/gin-server/src/clients"
 	"github.com/hunterheston/gin-server/src/stringgeneration"
 	"github.com/joho/godotenv"
 	"google.golang.org/api/option"
@@ -77,7 +79,6 @@ func New(ctx context.Context) Firestore {
 
 ///////////////////////////////////////////
 func (f Firestore) LookUp(ctx context.Context, id string) ([]byte, error) {
-
 	doc, err := f.c.Collection(firestorePath).Doc(id).Get(ctx)
 	if err != nil {
 		fmt.Println("error getting doc")
@@ -94,6 +95,10 @@ func (f Firestore) LookUp(ctx context.Context, id string) ([]byte, error) {
 	if !ok {
 		fmt.Println("error url data is not of type string")
 		return nil, fmt.Errorf("error url data is not of type string")
+	}
+	docPath := path.Join(firestorePath, id)
+	if err := f.updateLookupMetric(ctx, docPath); err != nil {
+		fmt.Printf("error updating metrics for %q: %v", docPath, err)
 	}
 
 	return []byte(strURL), nil
@@ -132,4 +137,36 @@ func (f Firestore) Save(ctx context.Context, value []byte) (string, error) {
 	}
 
 	return resultID, nil
+}
+
+///////////////////////////////////////////
+// Metrics for save and lookup
+///////////////////////////////////////////
+type lookupMetric struct {
+	ip        string
+	timestamp time.Time
+}
+
+func (f Firestore) updateLookupMetric(ctx context.Context, path string) error {
+	fs, err := clients.FirestoreClient(ctx)
+	if err != nil {
+		return err
+	}
+
+	c, ok := ctx.(*gin.Context)
+	if !ok {
+		return fmt.Errorf("error casting context.Context to gin.Context")
+	}
+
+	metric := lookupMetric{}
+
+	metric.ip = c.Request.Header.Get("CF-Connecting-IP")
+	metric.timestamp = time.Now()
+
+	docRef := fs.Doc(path)
+	docRef.Collection("metrics").Add(ctx, map[string]interface{}{
+		"ip":        metric.ip,
+		"timestamp": metric.timestamp,
+	})
+	return nil
 }
