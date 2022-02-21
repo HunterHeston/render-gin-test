@@ -20,9 +20,6 @@ func New(valueStore valuestore.ValueStore) func(c *gin.Context) {
 
 // main route handler
 func CreateURL(c *gin.Context) {
-
-	fmt.Println("HSH CF-Connecting-IP: ", c.Request.Header.Get("CF-Connecting-IP"))
-
 	// route expects a single param "url"
 	rawUrlInput := c.Query("url")
 
